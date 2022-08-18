@@ -22,12 +22,15 @@ type FeatchImagesResponse = {
 };
 
 export default function Home(): JSX.Element {
-  async function fetchImages({ pageParam = 0 }): Promise<Image[]> {
-    const { data } = await api.post<FeatchImagesResponse>('/images', {
+  async function fetchImages({ pageParam = 0 }): Promise<FeatchImagesResponse> {
+    const { data } = await api.get<FeatchImagesResponse>('/images', {
       params: { pageParam },
     });
 
-    return data.data || [];
+    return {
+      data: data.data || [],
+      after: data.after,
+    };
   }
 
   const {
@@ -37,13 +40,13 @@ export default function Home(): JSX.Element {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<Image[]>('images', fetchImages, {
+  } = useInfiniteQuery('images', fetchImages, {
     getNextPageParam: (lastPages, page) => {
       console.log(lastPages);
       console.log(page);
       return null;
-    }},
-  );
+    },
+  });
 
   const formattedData = useMemo(() => {
     // TODO FORMAT AND FLAT DATA ARRAY
@@ -58,7 +61,7 @@ export default function Home(): JSX.Element {
       <Header />
 
       <Box maxW={1120} px={20} mx="auto" my={20}>
-        <CardList cards={formattedData} />
+        {/* <CardList cards={formattedData} /> */}
         {/* TODO RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
       </Box>
     </>
