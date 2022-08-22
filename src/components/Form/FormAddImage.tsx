@@ -27,27 +27,21 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
 
   const formValidations = {
     image: {
-      // TODO REQUIRED, LESS THAN 10 MB AND ACCEPTED FORMATS VALIDATIONS
       required: { value: true, message: 'Arquivo obrigatório' },
       validate: {
         acceptedFormats: v => {
           const regex = new RegExp(
             /([a-zA-Z0-9\s_\\.\-():])+(.png|.jpeg|.gif)$/
           );
-
           if (!regex.test(v[0].type)) {
             return 'Somente são aceitos arquivos PNG, JPEG e GIF';
           }
-
           return true;
         },
         lessThan10MB: v => {
-          console.log('bytesToMB(v[0].size)', bytesToMB(v[0].size));
-
           if (bytesToMB(v[0].size) > 10) {
             return 'O arquivo deve ser menor que 10MB';
           }
-
           return true;
         },
       },
