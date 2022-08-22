@@ -42,8 +42,8 @@ export default function Home(): JSX.Element {
     hasNextPage,
   } = useInfiniteQuery('images', fetchImages, {
     getNextPageParam: (lastPages, page) => {
-      console.log(lastPages);
-      console.log(page);
+      // console.log(lastPages);
+      // console.log(page);
       return null;
     },
   });
