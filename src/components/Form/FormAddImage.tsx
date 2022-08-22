@@ -20,18 +20,18 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const formValidations = {
     image: {
       // TODO REQUIRED, LESS THAN 10 MB AND ACCEPTED FORMATS VALIDATIONS
-      required: 'Campo obrigatório',
+      required: { value: true, message: 'Arquivo obrigatório' },
     },
     title: {
       // TODO REQUIRED, MIN AND MAX LENGTH VALIDATIONS
-      required: 'Campo obrigatório',
-      maxLength: 15,
-      minLength: 5,
+      required: { value: true, message: 'Título obrigatório' },
+      minLength: { value: 2, message: 'Mínimo de 2 caracteres' },
+      maxLength: { value: 20, message: 'Máximo de 20 caracteres' },
     },
     description: {
       // TODO REQUIRED, MAX LENGTH VALIDATIONS
-      required: 'Campo obrigatório',
-      maxLength: 60,
+      required: { value: true, message: 'Descrição obrigatória' },
+      maxLength: { value: 65, message: 'Máximo de 65 caracteres' },
     },
   };
 
@@ -68,19 +68,19 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
           setLocalImageUrl={setLocalImageUrl}
           setError={setError}
           trigger={trigger}
-          {...register('image')}
+          {...register('image', formValidations.image)}
           error={errors.image}
         />
 
         <TextInput
           placeholder="Título da imagem..."
-          {...register('title')}
+          {...register('title', formValidations.title)}
           error={errors.title}
         />
 
         <TextInput
           placeholder="Descrição da imagem..."
-          {...register('description')}
+          {...register('description', formValidations.description)}
           error={errors.description}
         />
       </Stack>
