@@ -17,7 +17,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const [localImageUrl, setLocalImageUrl] = useState('');
   const toast = useToast();
 
-  const formValidations: Record<string, RegisterOptions<FormData, any>> = {
+  const formValidations = {
     image: {
       // TODO REQUIRED, LESS THAN 10 MB AND ACCEPTED FORMATS VALIDATIONS
       required: 'Campo obrigatório',
@@ -68,19 +68,19 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
           setLocalImageUrl={setLocalImageUrl}
           setError={setError}
           trigger={trigger}
-          {...register('image', formValidations.image)}
+          {...register('image')}
           error={errors.image}
         />
 
         <TextInput
           placeholder="Título da imagem..."
-          {...register('title', formValidations.title)}
+          {...register('title')}
           error={errors.title}
         />
 
         <TextInput
           placeholder="Descrição da imagem..."
-          {...register('description', formValidations.description)}
+          {...register('description')}
           error={errors.description}
         />
       </Stack>
