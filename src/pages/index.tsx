@@ -24,7 +24,7 @@ type FeatchImagesResponse = {
 export default function Home(): JSX.Element {
   async function fetchImages({ pageParam = 0 }): Promise<FeatchImagesResponse> {
     const { data } = await api.get<FeatchImagesResponse>('/images', {
-      params: { pageParam },
+      params: { after: pageParam || null },
     });
 
     return {
@@ -43,14 +43,33 @@ export default function Home(): JSX.Element {
   } = useInfiniteQuery('images', fetchImages, {
     getNextPageParam: (lastPages, page) => {
       // console.log(lastPages);
-      // console.log(page);
-      return null;
+      return page[0].after;
     },
   });
 
   const formattedData = useMemo(() => {
-    // TODO FORMAT AND FLAT DATA ARRAY
+    console.log('Mudou data');
+
+    if (data && data.pages) {
+      console.log(data.pages);
+
+      return data.pages[0].data.map(item => {
+        return {
+          title: item.title,
+          description: item.description,
+          url: item.url,
+          ts: item.ts,
+          id: item.id,
+        };
+      });
+    }
+
+    return [];
   }, [data]);
+
+  async function loadMore(): Promise<void> {
+    await fetchNextPage({});
+  }
 
   // TODO RENDER LOADING SCREEN
 
@@ -61,8 +80,17 @@ export default function Home(): JSX.Element {
       <Header />
 
       <Box maxW={1120} px={20} mx="auto" my={20}>
-        {/* <CardList cards={formattedData} /> */}
-        {/* TODO RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
+        <CardList cards={formattedData} />
+
+        {hasNextPage && (
+          <Button
+            onClick={() => loadMore()}
+            isLoading={isFetchingNextPage}
+            isDisabled={isFetchingNextPage}
+          >
+            Carregar mais
+          </Button>
+        )}
       </Box>
     </>
   );
