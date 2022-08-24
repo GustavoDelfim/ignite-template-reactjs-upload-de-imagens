@@ -58,7 +58,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   };
 
   async function save(params: Record<string, unknown>): Promise<SaveResponse> {
-    const { data } = await api.post<SaveResponse>('/images', {
+    const { data } = await api.post<SaveResponse>('/api/images', {
       title: params.title,
       description: params.description,
       url: imageUrl,
