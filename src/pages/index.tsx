@@ -27,10 +27,7 @@ export default function Home(): JSX.Element {
       params: { after: pageParam || null },
     });
 
-    return {
-      data: data.data || [],
-      after: data.after,
-    };
+    return data;
   }
 
   const {
@@ -41,45 +38,22 @@ export default function Home(): JSX.Element {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery('images', fetchImages, {
-    getNextPageParam: (lastPages, page) => {
-      return page[page.length - 1].after;
-    },
+    getNextPageParam: lastPages => lastPages?.after || null,
   });
 
   const formattedData = useMemo(() => {
-    if (data && data.pages) {
-      let items = [];
+    const items = data?.pages.flatMap(page => {
+      return page.data.flat();
+    });
 
-      // eslint-disable-next-line no-restricted-syntax
-      for (const page of data.pages) {
-        const itemsPage = page.data.map(item => {
-          return {
-            title: item.title,
-            description: item.description,
-            url: item.url,
-            ts: item.ts,
-            id: item.id,
-          };
-        });
-
-        items = [...items, ...itemsPage];
-      }
-
-      return items;
-    }
-
-    return [];
+    return items;
   }, [data]);
 
-  async function loadMore(): Promise<void> {
-    await fetchNextPage();
-  }
-
-  if (isLoading) {
+  if (isLoading && !isError) {
     return <Loading />;
   }
 
-  if (isError) {
+  if (!isLoading && isError) {
     return <Error />;
   }
 
@@ -92,12 +66,12 @@ export default function Home(): JSX.Element {
 
         {hasNextPage && (
           <Button
-            onClick={() => loadMore()}
+            onClick={() => fetchNextPage()}
             isLoading={isFetchingNextPage}
             isDisabled={isFetchingNextPage}
             mt="40px"
           >
-            Carregar mais
+            {isFetchingNextPage ? 'Carregando...' : 'Carregar mais'}
           </Button>
         )}
       </Box>

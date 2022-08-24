@@ -6,7 +6,6 @@ import {
   ModalBody,
   Image,
   Link,
-  Box,
 } from '@chakra-ui/react';
 
 interface ModalViewImageProps {
@@ -23,9 +22,22 @@ export function ModalViewImage({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent p={0} borderRadius={8}>
+      <ModalContent
+        mx="auto"
+        w="auto"
+        h="auto"
+        maxW={['300px', '500px', '900px']}
+        maxH={['350px', '450px', '600px']}
+        p={0}
+        borderRadius={8}
+      >
         <ModalBody p={0}>
-          <Image src={imgUrl} borderTopRadius={6} />
+          <Image
+            src={imgUrl}
+            borderTopRadius={6}
+            maxW={['300px', '500px', '900px']}
+            maxH={['350px', '450px', '600px']}
+          />
         </ModalBody>
 
         <ModalFooter

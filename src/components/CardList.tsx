@@ -20,7 +20,7 @@ export function CardList({ cards }: CardsProps): JSX.Element {
 
   const [currentURLImage, setCurrentURLImage] = useState('');
 
-  function viewImage(url: string): void {
+  function handleViewImage(url: string): void {
     setCurrentURLImage(url);
     onOpen();
   }
@@ -33,12 +33,10 @@ export function CardList({ cards }: CardsProps): JSX.Element {
             <Card
               key={item.id}
               data={{
-                title: item.title,
-                description: item.description,
+                ...item,
                 url: item.url || '/default.png',
-                ts: item.ts,
               }}
-              viewImage={(url: string) => viewImage(url)}
+              viewImage={(url: string) => handleViewImage(url)}
             />
           );
         })}
