@@ -95,6 +95,7 @@ export default function Home(): JSX.Element {
             onClick={() => loadMore()}
             isLoading={isFetchingNextPage}
             isDisabled={isFetchingNextPage}
+            mt="40px"
           >
             Carregar mais
           </Button>
