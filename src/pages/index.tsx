@@ -42,33 +42,38 @@ export default function Home(): JSX.Element {
     hasNextPage,
   } = useInfiniteQuery('images', fetchImages, {
     getNextPageParam: (lastPages, page) => {
-      // console.log(lastPages);
-      return page[0].after;
+      console.log(lastPages);
+      return page[page.length - 1].after;
     },
   });
 
   const formattedData = useMemo(() => {
-    console.log('Mudou data');
-
     if (data && data.pages) {
-      console.log(data.pages);
+      let items = [];
 
-      return data.pages[0].data.map(item => {
-        return {
-          title: item.title,
-          description: item.description,
-          url: item.url,
-          ts: item.ts,
-          id: item.id,
-        };
-      });
+      // eslint-disable-next-line no-restricted-syntax
+      for (const page of data.pages) {
+        const itemsPage = page.data.map(item => {
+          return {
+            title: item.title,
+            description: item.description,
+            url: item.url,
+            ts: item.ts,
+            id: item.id,
+          };
+        });
+
+        items = [...items, ...itemsPage];
+      }
+
+      return items;
     }
 
     return [];
   }, [data]);
 
   async function loadMore(): Promise<void> {
-    await fetchNextPage({});
+    await fetchNextPage();
   }
 
   // TODO RENDER LOADING SCREEN
