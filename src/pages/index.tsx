@@ -42,7 +42,6 @@ export default function Home(): JSX.Element {
     hasNextPage,
   } = useInfiniteQuery('images', fetchImages, {
     getNextPageParam: (lastPages, page) => {
-      console.log(lastPages);
       return page[page.length - 1].after;
     },
   });
@@ -76,9 +75,13 @@ export default function Home(): JSX.Element {
     await fetchNextPage();
   }
 
-  // TODO RENDER LOADING SCREEN
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  // TODO RENDER ERROR SCREEN
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <>
