@@ -23,7 +23,7 @@ type FeatchImagesResponse = {
 
 export default function Home(): JSX.Element {
   async function fetchImages({ pageParam = 0 }): Promise<FeatchImagesResponse> {
-    const { data } = await api.get<FeatchImagesResponse>('/images', {
+    const { data } = await api.get<FeatchImagesResponse>('/api/images', {
       params: { after: pageParam || null },
     });
 
